@@ -7,6 +7,8 @@ import MongoStore from "connect-mongo";
 import mongoose from "mongoose";
 import UserRoute from "./routes/UserRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
+import TokoRoute from "./routes/TokoRoute.js";
+import ProductRoute from "./routes/ProductRoute.js";
 
 const app = express();
 dotenv.config();
@@ -39,6 +41,8 @@ app.use(
 
 app.use(UserRoute);
 app.use(AuthRoute);
+app.use(TokoRoute);
+app.use(ProductRoute);
 
 app.listen(
   process.env.PORT,

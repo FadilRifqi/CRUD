@@ -1,13 +1,10 @@
 import User from "../model/UserModel.js";
 import argon2 from "argon2";
 import { randomUUID } from "crypto";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 export const getAllUser = async (req, res) => {
   try {
-    const users = await User.find().select("uuid username img -_id");
+    const users = await User.find().select("uuid username img ");
     if (!users || users.length < 1)
       return res.status(404).json({ msg: "Belum Ada User" });
     return res.status(200).json({ users });
