@@ -11,7 +11,7 @@ const TokoSchema = new mongoose.Schema({
     type: ownerType,
     required: [true, "cant be blank"],
   },
-  product: { type: Array, default: [{}] },
+  product: { type: Array, default: [] },
   rating: { type: Number, default: 0 },
   location: { type: String, default: "" },
 });

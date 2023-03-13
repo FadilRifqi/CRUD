@@ -1,22 +1,33 @@
 import Product from "../model/ProductModel.js";
+import Toko from "../model/TokoModel.js";
 import User from "../model/UserModel.js";
 
 export const createProduct = async (req, res) => {
   try {
-    const { name, img, category, owner_name, stock, description } = req.body;
+    const { product_name, img, category, owner_name, stock, description } =
+      req.body;
     const owner_uuid = req.session.uuid;
+
+    const curToko = await Toko.findOne({ "creator.name": owner_name });
+    if (!curToko) return res.status(404).json({ msg: "Something Went Wrong" });
+
     const user = await User.findOne({ uuid: owner_uuid }).select("_id");
     if (!user) return res.status(403).json({ msg: "You must Login to Access" });
     const product = await Product.create({
-      name: name,
+      name: product_name,
       img: img,
       category: category,
       description: description,
-      "owner.name": owner_name,
-      "owner.uuid": owner_uuid,
-      "owner._id": user._id,
+      "creator.name": owner_name,
+      "creator.uuid": owner_uuid,
+      "creator._id": user._id,
       "property.stock": stock,
+      "property.toko": curToko.tokoname,
     });
+
+    curToko.product.push(product);
+    curToko.save();
+
     res.status(201).json({ msg: "Product Created Successfuly" });
   } catch (error) {
     res.status(400).json({ msg: error.message });
@@ -48,7 +59,7 @@ export const getProduct = async (req, res) => {
 export const getMyProduct = async (req, res) => {
   try {
     const uuid = req.params.id;
-    const products = await Product.find({ "owner.uuid": uuid });
+    const products = await Product.find({ "creator.uuid": uuid });
     if (!products)
       return res.status(404).json({ msg: "You Dont Have Product yet" });
     res.status(200).json({ products });

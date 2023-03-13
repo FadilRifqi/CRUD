@@ -11,7 +11,7 @@ const ProductSchema = new mongoose.Schema({
   img: { type: String, required: [true, "cant be blank"] },
   description: { type: String, required: [true, "cant be blank"] },
   category: { type: String, required: [true, "cant be blank"] },
-  owner: { type: OwnerType, required: [true, "cant be blank"] },
+  creator: { type: OwnerType, required: [true, "cant be blank"] },
   property: { type: Object, default: {} },
 });
 
